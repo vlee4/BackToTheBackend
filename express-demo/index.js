@@ -1,6 +1,16 @@
 const express = require("express");
 const app = express(); // JS function designed to be passed back to Node's HTTP servers (which can then specify http/https)
-const PORT = process.env.PORT || 3000; //Port determined by hosting env, so need to check
+const PORT = process.env.PORT || 3000; //Port determined by hosting env, so need to check, otherwise default to 3000
+
+//MIDDLEWARE
+//By default, Express can't parse JSON in req.body so you need middleware to enable this
+app.use(express.json());
+
+const courses = [
+  { id: 1, name: "course1" },
+  { id: 2, name: "course2" },
+  { id: 3, name: "course3" },
+];
 
 //Route handler
 app.get("/", (req, res) => {
@@ -8,7 +18,40 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/courses", (req, res) => {
-  res.send([1, 2, 3, 5]);
+  res.send(courses);
+});
+
+app.get("/api/courses/:id", (req, res) => {
+  //using parseInt to make sure the id from the params is correct type (num)
+  const course = courses.find((c) => c.id === parseInt(req.params.id));
+  if (!course)
+    res
+      .status(404)
+      .send(`The course with id ${parseInt(req.params.id)} was not found`);
+  res.send(course);
+});
+
+//params can be sent via get requests, req.params is used to access those variables
+//if a query string is included then that can be accessed via req.query; for example, the browser url would look like .../api/posts/2019/1?sortBy=name
+app.get("/api/posts/:year/:month", (req, res) => {
+  res.send(req.query);
+});
+
+app.post("/api/courses", (req, res) => {
+  if (!req.body.name || req.body.name.length < 3) {
+    //400 Bad Request
+    res
+      .status(400)
+      .send("Name si required and should be a minimum of 3 characters");
+    return;
+  }
+  const course = {
+    id: courses.length + 1,
+    name: req.body.name,
+  };
+  courses.push(courses);
+  //By convention, post req send back the new data point they've created so that the client knows the id/content of the new data point
+  res.send(course);
 });
 
 //binds & listens to specified host & port, identical to Node's http.Server.listen()
