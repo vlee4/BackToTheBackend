@@ -39,18 +39,13 @@ app.get("/api/posts/:year/:month", (req, res) => {
 });
 
 app.post("/api/courses", (req, res) => {
-  //Schema defines what our data should look like
-  const schema = Joi.object({
-    name: Joi.string().min(3).required(), //checks for a string that is min 3 char & is a required field
-  });
-
-  const result = schema.validate(req.body);
-
-  if (result.error) {
+  const { error } = validateCourse(req.body);
+  if (error) {
     //400 Bad Request
-    res.status(400).send(result.error.details[0].message);
+    res.status(400).send(error.details[0].message);
     return;
   }
+
   const course = {
     id: courses.length + 1,
     name: req.body.name,
@@ -60,7 +55,35 @@ app.post("/api/courses", (req, res) => {
   res.send(course);
 });
 
+app.put("/api/courses/:id", (req, res) => {
+  const course = courses.find((c) => c.id === parseInt(req.params.id));
+  if (!course)
+    res
+      .status(404)
+      .send(`The course with id ${parseInt(req.params.id)} was not found`);
+
+  const { error } = validateCourse(req.body);
+  if (error) {
+    //400 Bad Request
+    res.status(400).send(error.details[0].message);
+    return;
+  }
+  //Update course
+  course.name = req.body.name;
+  //Return updated course
+  res.send(course);
+});
+
 //binds & listens to specified host & port, identical to Node's http.Server.listen()
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
+
+function validateCourse(course) {
+  //Schema defines what our data should look like
+  const schema = Joi.object({
+    name: Joi.string().min(3).required(), //checks for a string that is min 3 char & is a required field
+  });
+
+  return schema.validate(course);
+}
