@@ -1,3 +1,4 @@
+const Joi = require("joi");
 const express = require("express");
 const app = express(); // JS function designed to be passed back to Node's HTTP servers (which can then specify http/https)
 const PORT = process.env.PORT || 3000; //Port determined by hosting env, so need to check, otherwise default to 3000
@@ -38,11 +39,16 @@ app.get("/api/posts/:year/:month", (req, res) => {
 });
 
 app.post("/api/courses", (req, res) => {
-  if (!req.body.name || req.body.name.length < 3) {
+  //Schema defines what our data should look like
+  const schema = Joi.object({
+    name: Joi.string().min(3).required(), //checks for a string that is min 3 char & is a required field
+  });
+
+  const result = schema.validate(req.body);
+
+  if (result.error) {
     //400 Bad Request
-    res
-      .status(400)
-      .send("Name si required and should be a minimum of 3 characters");
+    res.status(400).send(result.error.details[0].message);
     return;
   }
   const course = {
