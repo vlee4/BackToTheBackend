@@ -3,9 +3,10 @@ const express = require("express");
 const app = express(); // JS function designed to be passed back to Node's HTTP servers (which can then specify http/https)
 const PORT = process.env.PORT || 3000; //Port determined by hosting env, so need to check, otherwise default to 3000
 
-//MIDDLEWARE
+//(Global) MIDDLEWARE
 //By default, Express can't parse JSON in req.body so you need middleware to enable this
 app.use(express.json());
+app.use(logger);
 
 const courses = [
   { id: 1, name: "course1" },
@@ -18,7 +19,8 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-app.get("/api/courses", (req, res) => {
+app.get("/api/courses", auth, (req, res) => {
+  console.log(`User is admin = ${req.admin}`);
   res.send(courses);
 });
 
@@ -86,6 +88,20 @@ app.delete("/api/courses/:id", (req, res) => {
   res.send(course);
   //REturn same course
 });
+
+function logger(req, res, next) {
+  console.log("LOG");
+  next();
+}
+
+function auth(req, res, next) {
+  if (req.query?.admin === "true") {
+    req.admin = true;
+    next();
+  } else {
+    res.send("No auth");
+  }
+}
 
 //binds & listens to specified host & port, identical to Node's http.Server.listen()
 app.listen(PORT, () => {
