@@ -2,6 +2,25 @@
 
 Practicing...
 
+### Setup
+
+To run the PERN project do the following:
+
+1. Navigate into the PERN-tutorial directory with `cd PERN-tutorial`
+2. Install all necessary packages, `npm install`
+3. Create a database and set up a table within postgres using the commands in the database.sql file.
+
+- Note: You will have had to start psql in the terminal first using `sudo service postgresql start` and `sudo -u postgres psql` (Windows)
+
+4. Create a .env file inside the /server directory and include the following environmental variables
+
+- PGUSER='yourPostgresUser'
+- PGHOST='localhost'
+- PGDATABASE='perntodo'
+- PGPORT=thePortNumberYouChose
+
+5. To start the server run, `npm start`
+
 ### References
 
 [Node Tutorial](https://www.youtube.com/watch?v=TlB_eWDSMt4)
