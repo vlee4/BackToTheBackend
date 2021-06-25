@@ -27,7 +27,6 @@ app.get("/todos/:id", async (req, res) => {
       id,
     ]);
     res.json(todo.rows[0]);
-    // res.end();
   } catch (err) {
     console.err(err.message);
   }
