@@ -22,7 +22,7 @@ To run the PERN project do the following:
 5. To start the server run, `npm start`
 6. To start the frontend react app, in a separate terminal
 
-- navigate to the client folder `cd ..`, `cd client`
+- navigate to the client folder `cd /PERN-tutorial/client`
 - then use `npm start`
 
 ### References
