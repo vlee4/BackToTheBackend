@@ -1,13 +1,15 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-const PORT = process.env.PORT || 5000;
 const cors = require("cors");
 const pool = require("./db");
+const path = require("path");
+const PORT = process.env.PORT || 5000;
 
 //Middleware
 app.use(cors()); //Allows frontend & backend to communicate despite being on diff ports
 app.use(express.json()); //Allows server to get data from client-side via req body
+// app.use(express.static(path.resolve(__dirname, "../client/build"))); //Sends build of React App
 
 //ROUTES
 //GET ALL
@@ -77,6 +79,10 @@ app.delete("/todos/:id", async (req, res) => {
     console.error(err.messge);
   }
 });
+//Any GET requests not handled by other routes returns React App
+// app.get("*", (req, res) => {
+//   res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+// });
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);

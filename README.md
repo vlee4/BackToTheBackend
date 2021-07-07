@@ -31,3 +31,5 @@ To run the PERN project do the following:
 [Node + Express](https://www.youtube.com/watch?v=pKd0Rpw7O48)
 [Middleware](https://www.youtube.com/watch?v=lY6icfhap2o)
 [PERN Stack](https://www.youtube.com/watch?v=ldYcgPKEZC8)
+
+- [w3Schools modal reference](https://www.w3schools.com/bootstrap4/bootstrap_modal.asp)
