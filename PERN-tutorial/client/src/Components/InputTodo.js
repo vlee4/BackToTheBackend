@@ -12,7 +12,7 @@ const InputTodo = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      console.log(response);
+      window.location = "/"; //refreshes window by redirecting to '/'
     } catch (error) {
       console.error(error.message);
     }
